@@ -1,0 +1,18 @@
+# Origen: Postgresql_en_docker/docker-compose.yml
+# Reescrito para levantar PostgreSQL 17 en un contenedor Docker persistente.
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: producto
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
