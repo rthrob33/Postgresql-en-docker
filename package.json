@@ -1,30 +1,27 @@
 {
   "name": "postgresql-en-docker",
   "version": "1.0.0",
-  "description": "Levantar PostgreSQL en Docker con esquema, migraciones y seed usando Drizzle ORM (reescrito a partir de Postgresql_en_docker/package.json)",
-  "main": "src/db/client.ts",
-  "type": "commonjs",
-  "scripts": {
-    "db:up": "docker compose up -d",
-    "db:down": "docker compose down",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:seed": "tsx src/db/seed.ts",
-    "db:studio": "drizzle-kit studio"
-  },
-  "keywords": [],
-  "author": "",
+  "description": "PostgreSQL en Docker con esquema en Drizzle, migración, seed y un servicio de tareas",
+  "author": "Roberth Melendez (carnet 2500461)",
   "license": "ISC",
+  "scripts": {
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "db:generar": "drizzle-kit generate",
+    "db:migrar": "drizzle-kit migrate",
+    "db:seed": "tsx src/db/seed.ts",
+    "start": "tsx src/index.ts"
+  },
   "dependencies": {
-    "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
     "pg": "^8.22.0"
   },
   "devDependencies": {
-    "@types/node": "^26.2.0",
+    "@types/node": "^22.0.0",
     "@types/pg": "^8.21.0",
     "drizzle-kit": "^0.31.10",
-    "tsx": "^4.23.11"
+    "tsx": "^4.23.11",
+    "typescript": "^5.6.0"
   }
 }
