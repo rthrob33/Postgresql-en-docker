@@ -1,23 +1,28 @@
-// Origen: Postgresql_en_docker/src/db/schema.ts
-// Reescrito: define el esquema de la tabla "usuarios" con Drizzle ORM (pg-core).
-// A partir de este archivo se genera la migración con drizzle-kit.
-import { pgTable, pgEnum, text, uuid, timestamp } from 'drizzle-orm/pg-core'
+import { pgTable, pgEnum, serial, text, integer, timestamp } from 'drizzle-orm/pg-core'
 
-// Enum de roles disponibles para un usuario del sistema.
-export const rolEnum = pgEnum('rol', [
-    'admin', 'editor', 'lector',
-])
+// Estados posibles de una tarea
+export const estadoTarea = pgEnum('estado_tarea', ['pendiente', 'en_progreso', 'terminada'])
 
-// Tabla principal de usuarios.
+// Tabla de usuarios
 export const usuarios = pgTable('usuarios', {
-    id: uuid('id').primaryKey().defaultRandom(),
-    email: text('email').notNull().unique(),
-    nombre: text('nombre').notNull(),
-    passwordHash: text('password_hash').notNull(),
-    rol: rolEnum('rol').notNull().default('lector'),
-    creadoEn: timestamp('creado_en', { withTimezone: true }).notNull().defaultNow(),
+  id: serial('id').primaryKey(),
+  nombre: text('nombre').notNull(),
+  correo: text('correo').notNull().unique(),
+  creadoEn: timestamp('creado_en').notNull().defaultNow(),
 })
 
-// Tipos inferidos para usar en el resto de la aplicación.
+// Tabla de tareas (cada tarea pertenece a un usuario)
+export const tareas = pgTable('tareas', {
+  id: serial('id').primaryKey(),
+  titulo: text('titulo').notNull(),
+  descripcion: text('descripcion'),
+  estado: estadoTarea('estado').notNull().default('pendiente'),
+  usuarioId: integer('usuario_id')
+    .notNull()
+    .references(() => usuarios.id, { onDelete: 'cascade' }),
+  creadaEn: timestamp('creada_en').notNull().defaultNow(),
+})
+
 export type Usuario = typeof usuarios.$inferSelect
-export type NuevoUsuario = typeof usuarios.$inferInsert
+export type Tarea = typeof tareas.$inferSelect
+export type NuevaTarea = typeof tareas.$inferInsert
