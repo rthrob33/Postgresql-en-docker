@@ -1,24 +1,83 @@
 {
-  "id": "10fe263e-729c-4cd1-8ea9-4a473ee84af6",
+  "id": "118c724c-4ee9-4cf3-8bab-bd0168f904c1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.tareas": {
+      "name": "tareas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "titulo": {
+          "name": "titulo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descripcion": {
+          "name": "descripcion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "estado": {
+          "name": "estado",
+          "type": "estado_tarea",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pendiente'"
+        },
+        "usuario_id": {
+          "name": "usuario_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creada_en": {
+          "name": "creada_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "tareas_usuario_id_usuarios_id_fk": {
+          "name": "tareas_usuario_id_usuarios_id_fk",
+          "tableFrom": "tareas",
+          "tableTo": "usuarios",
+          "columnsFrom": [
+            "usuario_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.usuarios": {
       "name": "usuarios",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "email": {
-          "name": "email",
-          "type": "text",
-          "primaryKey": false,
           "notNull": true
         },
         "nombre": {
@@ -27,23 +86,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "password_hash": {
-          "name": "password_hash",
+        "correo": {
+          "name": "correo",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "rol": {
-          "name": "rol",
-          "type": "rol",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'lector'"
-        },
         "creado_en": {
           "name": "creado_en",
-          "type": "timestamp with time zone",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
@@ -53,11 +104,11 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "usuarios_email_unique": {
-          "name": "usuarios_email_unique",
+        "usuarios_correo_unique": {
+          "name": "usuarios_correo_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "email"
+            "correo"
           ]
         }
       },
@@ -67,13 +118,13 @@
     }
   },
   "enums": {
-    "public.rol": {
-      "name": "rol",
+    "public.estado_tarea": {
+      "name": "estado_tarea",
       "schema": "public",
       "values": [
-        "admin",
-        "editor",
-        "lector"
+        "pendiente",
+        "en_progreso",
+        "terminada"
       ]
     }
   },
